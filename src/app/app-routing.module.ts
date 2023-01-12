@@ -4,9 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes =
   [
     {
-      path: 'home',
+      path: 'New',
       loadChildren:() => 
-      import('./pages/header/header.module').then(m => m.HeaderModule)
+      import('./pages/blogs/crear-blog/crear-blog.module').then(m => m.CrearBlogModule)
     },
     {
       path: 'list-blog',
@@ -17,6 +17,11 @@ const routes: Routes =
       path: 'detalle/:id',
       loadChildren:() => 
       import('./pages/blogs/detalle/detalle.module').then(m => m.DetalleModule)
+    },
+    {
+      path: 'home',
+      loadChildren:() => 
+      import('./pages/vista-principal/vista-principal.module').then(m => m.VistaPrincipalModule)
     },
     {
       path: '',

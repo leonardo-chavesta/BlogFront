@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, take } from 'rxjs';
-import { Blog } from 'src/app/components/interfaces/blog.interface';
+import { take } from 'rxjs';
 import { BlogsService } from 'src/app/services/blogs.service';
 
 @Component({
@@ -11,21 +11,34 @@ import { BlogsService } from 'src/app/services/blogs.service';
 })
 export class DetalleComponent implements OnInit {
   detalleBlog!: any
+  id!: number
+  formData!: FormGroup;
 
-  blog!: {}
   constructor(
     private router: ActivatedRoute,
     private blogSvc: BlogsService,
-  ){}
-
+    private readonly fb: FormBuilder
+  ) { }
   ngOnInit(): void {
+    this.obtenerDetalle();
+  }
+  obtenerDetalle(): void {
     this.router.params.pipe(take(1)).subscribe((params) => {
-      const id = params['id'];
-      this.blogSvc.getDetalleBLog(id).subscribe(response => {
+      this.id = params['id'];
+      this.blogSvc.getDetalleBLog(this.id).subscribe(response => {
         this.detalleBlog = response
-        console.log(this.detalleBlog)
-      })});
+      })
+    });
+    this.formData = this.initForm();
+  }
+  onSubmit(): void {
+    this.blogSvc.postComentarPost(this.id, this.formData.value).subscribe(() => this.obtenerDetalle())
+  }
 
+  initForm(): FormGroup {
+    return this.fb.group({
+      comentario: ['']
+    })
   }
 
 
